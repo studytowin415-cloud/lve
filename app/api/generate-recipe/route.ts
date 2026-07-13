@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const { ingredients } = await request.json();
 
     const response = await ai.models.generateContent({
-     model: "gemini-3.5-flash",
+      model: "gemini-3.5-flash",
       contents: `
 You are a professional chef.
 
@@ -44,9 +44,7 @@ Return your answer in EXACTLY this format.
     });
   } catch (error) {
     console.error(error);
-finally {
-  setLoading(false);
-}
+
     return Response.json(
       { error: "Failed to generate recipe." },
       { status: 500 }
