@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCfjs9fgXZ6kutUG0ynbpUn9pCP_gVs05Sc",
+  apiKey: "AIzaSyCIs9fgXZ6kutUG0vnbpUn9pCP_gVsO5Sc",
   authDomain: "lvee-11405.firebaseapp.com",
   projectId: "lvee-11405",
   storageBucket: "lvee-11405.firebasestorage.app",
@@ -13,3 +13,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();

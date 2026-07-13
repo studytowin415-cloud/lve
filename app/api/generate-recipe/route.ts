@@ -44,7 +44,9 @@ Return your answer in EXACTLY this format.
     });
   } catch (error) {
     console.error(error);
-
+finally {
+  setLoading(false);
+}
     return Response.json(
       { error: "Failed to generate recipe." },
       { status: 500 }

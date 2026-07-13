@@ -1,4 +1,6 @@
 "use client";
+import { signInWithPopup } from "firebase/auth";
+import { googleProvider } from "../../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/config";
 import { useState } from "react";
@@ -26,7 +28,22 @@ export default function LoginPage() {
 }
 }
     const newLocal = "min-h-screen bg-linear-to-br from-amber-50 to-orange-100 flex items-center justify-center p-6";
-  return (
+  async function handleGoogleLogin() {
+  try {
+    await signInWithPopup(auth, googleProvider);
+
+    alert("Logged in with Google! 🎉");
+
+    window.location.href = "/";
+  } catch (error) {
+    if (error instanceof Error) {
+      alert(error.message);
+    } else {
+      alert("Google Sign-In failed.");
+    }
+  }
+}
+    return (
     <main className={newLocal}>
       <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl">
         <h1 className="text-center text-4xl font-bold text-amber-700">
@@ -62,6 +79,13 @@ export default function LoginPage() {
           >
             Login
           </button>
+          <button
+  type="button"
+  onClick={handleGoogleLogin}
+  className="mt-4 w-full rounded-xl border border-gray-300 bg-white py-3 font-medium hover:bg-gray-100"
+>
+  Continue with Google
+</button>
         </form>
 
         <p className="mt-6 text-center text-gray-600">

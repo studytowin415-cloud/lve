@@ -5,15 +5,17 @@ import { useState } from "react";
 export default function AIPage() {
   const [ingredients, setIngredients] = useState("");
   const [recipe, setRecipe] = useState("");
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   async function generateRecipe() {
     if (!ingredients.trim()) {
       alert("Please enter some ingredients.");
       return;
     }
 
+    setLoading(true);
+
     try {
-      setLoading(true);
       const response = await fetch("/api/generate-recipe", {
         method: "POST",
         headers: {
@@ -28,22 +30,23 @@ const [loading, setLoading] = useState(false);
 
       if (data.recipe) {
         setRecipe(data.recipe);
-setLoading(false);
-const oldHistory = JSON.parse(
-  localStorage.getItem("recipeHistory") || "[]"
-);
 
-localStorage.setItem(
-  "recipeHistory",
-  JSON.stringify([data.recipe, ...oldHistory])
-);
+        const oldHistory = JSON.parse(
+          localStorage.getItem("recipeHistory") || "[]"
+        );
+
+        localStorage.setItem(
+          "recipeHistory",
+          JSON.stringify([data.recipe, ...oldHistory])
+        );
       } else {
         alert("Something went wrong.");
       }
     } catch (error) {
       console.error(error);
-      setLoading(false);
       alert("Failed to connect to AI.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -66,12 +69,12 @@ localStorage.setItem(
         />
 
         <button
-  onClick={generateRecipe}
-  disabled={loading}
-  className="mt-6 rounded-full bg-amber-600 px-8 py-3 text-white hover:bg-amber-700 disabled:bg-gray-400"
->
-  {loading ? "🍳 Cooking..." : "Generate Recipe"}
-</button>
+          onClick={generateRecipe}
+          disabled={loading}
+          className="mt-6 rounded-full bg-amber-600 px-8 py-3 text-white hover:bg-amber-700 disabled:bg-gray-400"
+        >
+          {loading ? "🍳 Cooking..." : "Generate Recipe"}
+        </button>
 
         {recipe && (
           <div className="mt-8 whitespace-pre-wrap rounded-xl bg-amber-100 p-6">
