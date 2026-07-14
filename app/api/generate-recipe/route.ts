@@ -1,16 +1,10 @@
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY!,
-});
+import axios from "axios";
 
 export async function POST(request: Request) {
   try {
     const { ingredients } = await request.json();
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: `
+    const prompt = `
 You are a professional chef.
 
 Create one delicious recipe using ONLY these ingredients:
@@ -36,14 +30,39 @@ Return your answer in EXACTLY this format.
 
 💡 Chef Tips:
 ...
-`,
-    });
+`;
+
+    const response = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        contents: [
+          {
+            parts: [
+              {
+                text: prompt,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     return Response.json({
-      recipe: response.text,
+      recipe:
+        response.data.candidates?.[0]?.content?.parts?.[0]?.text ??
+        "No recipe generated.",
     });
-  } catch (error) {
-    console.error(error);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Gemini API Error:", error.response?.data);
+    } else {
+      console.error(error);
+    }
 
     return Response.json(
       { error: "Failed to generate recipe." },
