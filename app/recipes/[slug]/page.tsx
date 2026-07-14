@@ -1,3 +1,4 @@
+import RecipeActions from "../../../components/RecipeActions";
 import Image from "next/image";
 import FavoriteButton from "../../../components/FavoriteButton";
 import { recipes } from "@/data/recipes";
@@ -121,7 +122,7 @@ export default async function RecipeDetails({
             <li key={step}>{step}</li>
           ))}
         </ol>
-
+<RecipeActions title={recipe.title} />
       </div>
     </main>
   );

@@ -11,7 +11,11 @@ export default function Footer() {
         <p className="mt-6 text-sm text-gray-500">
           © 2025 LVE. All rights reserved.
         </p>
+        <p className="mt-6 text-center text-sm text-stone-500">
+  © {new Date().getFullYear()} LVE • Made with ❤️ by Shrinidhi
+</p>
       </div>
+      
     </footer>
   );
 }
